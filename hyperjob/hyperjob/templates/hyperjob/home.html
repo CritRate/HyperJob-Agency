@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% csrf_token %}
+{% for resume in resumes %}
+    <div>{{ resume.author }}: {{ resume.description }}</div>
+{% endfor %}
+<br>
+{% for vacancy in vacancies %}
+    <div>{{ vacancy.author }}: {{ vacancy.description }}</div>
+{% endfor %}
+
+
+
+<a href="{% url 'new_resume' %}">Create Resume</a>
+<a href="{% url 'new_vacancy' %}">Create Vacancy</a>
+</body>
+</html>
