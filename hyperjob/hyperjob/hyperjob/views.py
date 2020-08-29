@@ -6,8 +6,6 @@ from django.urls import reverse_lazy
 
 from resume.models import Resume
 from vacancy.models import Vacancy
-from resume.forms import ResumeForm
-from vacancy.forms import VacancyForm
 
 
 def index(request):
@@ -29,12 +27,7 @@ class MyLogInView(LoginView):
 def home(request):
     resumes = Resume.objects.all()
     vacancies = Vacancy.objects.all()
-    if request.user.is_staff:
-        form = VacancyForm()
-    else:
-        form = ResumeForm()
     return render(request, 'home.html', {
         'resumes': resumes,
-        'vacancies': vacancies,
-        'form': form
+        'vacancies': vacancies
     })

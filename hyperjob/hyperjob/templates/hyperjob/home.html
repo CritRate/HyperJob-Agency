@@ -5,18 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-{% csrf_token %}
-{% for resume in resumes %}
-    <div>{{ resume.author }}: {{ resume.description }}</div>
-{% endfor %}
-<br>
-{% for vacancy in vacancies %}
-    <div>{{ vacancy.author }}: {{ vacancy.description }}</div>
-{% endfor %}
-
-
-
-<a href="{% url 'new_resume' %}">Create Resume</a>
-<a href="{% url 'new_vacancy' %}">Create Vacancy</a>
+{% if user.is_staff %}
+    <form action="{% url 'new_vacancy' %}" method="POST">
+        {% csrf_token %}
+        <ul>
+            {{ form.as_ul }}
+        </ul>
+        <button type="submit">Submit</button>
+    </form>
+{% endif %}
+{% if user.is_authenticated and not user.is_staff %}
+    <form action="{% url 'new_resume' %}" method="POST">
+        {% csrf_token %}
+        <ul>
+            {{ form.as_ul }}
+        </ul>
+        <button type="submit">Submit</button>
+    </form>
+{% endif %}
 </body>
 </html>

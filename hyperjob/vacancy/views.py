@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, HttpResponse
 from django.core.exceptions import PermissionDenied
 from .models import Vacancy
 from .forms import VacancyForm
@@ -12,14 +12,10 @@ def all_vacancies(request):
 
 
 def new_vacancy(request):
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return HttpResponse(status=403)
     if request.method == 'POST':
         form = VacancyForm(request.POST)
-        if request.user.is_authenticated and request.user.is_staff:
-            if form.is_valid():
-                Vacancy.objects.create(description=form.cleaned_data['description'], author=request.user)
-        else:
-            raise PermissionDenied()
-    else:
-        form = VacancyForm()
-        return render(request, 'vacancy/new_vacancy.html', {'form': form})
+        if form.is_valid():
+            Vacancy.objects.create(description=form.cleaned_data['description'], author=request.user)
     return redirect(reverse('home'))
